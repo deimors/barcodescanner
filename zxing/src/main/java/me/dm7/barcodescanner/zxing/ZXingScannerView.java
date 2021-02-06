@@ -40,6 +40,7 @@ public class ZXingScannerView extends BarcodeScannerView {
     public static final List<BarcodeFormat> ALL_FORMATS = new ArrayList<>();
     private List<BarcodeFormat> mFormats;
     private ResultHandler mResultHandler;
+    private int mExpectedExtensionLength;
 
     static {
         ALL_FORMATS.add(BarcodeFormat.AZTEC);
@@ -76,6 +77,11 @@ public class ZXingScannerView extends BarcodeScannerView {
         initMultiFormatReader();
     }
 
+    public void setExpectedExtensionLength(int expectedExtensionLength) {
+        mExpectedExtensionLength = expectedExtensionLength;
+        initMultiFormatReader();
+    }
+
     public void setResultHandler(ResultHandler resultHandler) {
         mResultHandler = resultHandler;
     }
@@ -90,6 +96,11 @@ public class ZXingScannerView extends BarcodeScannerView {
     private void initMultiFormatReader() {
         Map<DecodeHintType,Object> hints = new EnumMap<>(DecodeHintType.class);
         hints.put(DecodeHintType.POSSIBLE_FORMATS, getFormats());
+
+        if (mExpectedExtensionLength > 0) {
+            hints.put(DecodeHintType.ALLOWED_EAN_EXTENSIONS, new int[] { mExpectedExtensionLength});
+        }
+
         mMultiFormatReader = new MultiFormatReader();
         mMultiFormatReader.setHints(hints);
     }
