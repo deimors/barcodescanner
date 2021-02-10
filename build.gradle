@@ -14,7 +14,7 @@ buildscript {
 }
 
 allprojects {
-    group = 'me.dm7.barcodescanner'
+    group = 'deimors.barcodescanner'
     version = '1.9.13'
 
     repositories {
@@ -46,6 +46,33 @@ subprojects {
                     targetSdkVersion versions.target_sdk
                     versionCode 1913
                     versionName "1.9.13"
+                }
+            }
+        }
+
+        if (project.isLibrary) {
+            configure(project) {
+                apply plugin: 'maven-publish'
+
+                publishing {
+                    publications {
+                        release(MavenPublication) {
+                            groupId project.group
+                            artifactId project.pomArtifactId
+                            version project.version
+                        }
+                    }
+
+                    repositories {
+                        maven {
+                            url 'https://pkgs.dev.azure.com/deimors/b2eba8b9-7fcf-4008-9d4e-263bfbfb116d/_packaging/primary/maven/v1'
+                            name 'primary'
+                            credentials {
+                                username "$azureUser"
+                                password "$azurePassword"
+                            }
+                        }
+                    }
                 }
             }
         }
