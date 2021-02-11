@@ -14,12 +14,22 @@ buildscript {
 }
 
 allprojects {
-    group = 'deimors.barcodescanner'
-    version = '1.9.13'
+    group = 'me.dm7.barcodescanner'
+    version = '1.10.1-deimors'
 
     repositories {
         google()
         jcenter()
+        repositories {
+            maven {
+                url 'https://pkgs.dev.azure.com/deimors/b2eba8b9-7fcf-4008-9d4e-263bfbfb116d/_packaging/primary/maven/v1'
+                name 'primary'
+                credentials {
+                    username "$azureUser"
+                    password "$azurePassword"
+                }
+            }
+        }
     }
 
     ext {
@@ -44,8 +54,8 @@ subprojects {
                 defaultConfig {
                     minSdkVersion versions.min_sdk
                     targetSdkVersion versions.target_sdk
-                    versionCode 1913
-                    versionName "1.9.13"
+                    versionCode 1101
+                    versionName "1.10.1-deimors"
                 }
             }
         }
@@ -60,6 +70,7 @@ subprojects {
                             groupId project.group
                             artifactId project.pomArtifactId
                             version project.version
+                            artifact("$buildDir/outputs/aar/${project.pomArtifactId}-release.aar")
                         }
                     }
 
@@ -125,7 +136,7 @@ subprojects {
 
                 apply plugin: 'com.jfrog.bintray'
 
-                version = '1.9.13'
+                version = '1.10.1-deimors'
 
                 if (project.hasProperty("android")) { // Android libraries
                     task sourcesJar(type: Jar) {
